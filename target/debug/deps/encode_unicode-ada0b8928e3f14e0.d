@@ -1,0 +1,11 @@
+/home/oddysee/Rust/rust_text-game/target/debug/deps/libencode_unicode-ada0b8928e3f14e0.rlib: /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/lib.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/errors.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/traits.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_char.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_iterator.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_char.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_iterator.rs
+
+/home/oddysee/Rust/rust_text-game/target/debug/deps/encode_unicode-ada0b8928e3f14e0.d: /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/lib.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/errors.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/traits.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_char.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_iterator.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_char.rs /home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_iterator.rs
+
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/lib.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/errors.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/traits.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_char.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf8_iterator.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_char.rs:
+/home/oddysee/.cargo/registry/src/github.com-1ecc6299db9ec823/encode_unicode-0.1.3/src/utf16_iterator.rs:
