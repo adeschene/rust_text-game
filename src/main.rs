@@ -11,6 +11,7 @@ use rustyline::Editor;
 use std::process;
 use std::fs;
 
+// Filename constants; TODO: File path expansion
 const INTRO_PATH: &str   = "../data/intro.txt";
 const HISTORY_PATH: &str = "../data/history.txt";
 const SAVE_PATH: &str    = "../data/savedgame.txt";
@@ -57,7 +58,13 @@ pub fn main() {
         let input = rl.readline("\n> ").expect("Readline error");
         rl.add_history_entry(input.as_ref());
         match input.to_ascii_lowercase().as_str() {
-            "north" => { gstate.curr_room = room::go_north(gstate.curr_room); }
+            "north" => { 
+                           if gstate.in_final_room {
+                               player_win(); // Escaped; Went north from final room.
+                           } else {
+                               gstate.curr_room = room::go_north(gstate.curr_room);
+                           }
+                       }
             "west"  => { gstate.curr_room = room::go_west(gstate.curr_room); }
             "south" => { gstate.curr_room = room::go_south(gstate.curr_room); }
             "east"  => { gstate.curr_room = room::go_east(gstate.curr_room); }
@@ -69,7 +76,10 @@ pub fn main() {
                        },
             other   => println!("\n{} is not a valid command.", other)
         }
-        println!("\nRoom name: {:?}\n", room::get_info(gstate.curr_room));
+        gstate = gstate.update_flags(room::FINAL_ROOM);
+        println!("\nRoom info: {:?}\nIn final room? {:?}\n"
+                 , room::get_info(gstate.curr_room)
+                 , gstate.in_final_room);
     }
 }
 
@@ -79,7 +89,7 @@ pub fn main() {
 ///
 /// Does not display when a saved game is loaded.
 ///
-/// If intro.txt is missing, returns a file read error.
+/// If intro.txt is missing, causes a file read error.
 
 pub fn print_intro_text(path: &str) {
     let intro = fs::read_to_string(path)
@@ -105,7 +115,18 @@ pub fn load_game(path: &str) -> state::State {
     state::State::deserialize(path)
 }
 
+/// When the player leaves through the northern door of
+/// the final room, the player wins the game.
+///
+/// Displays a congratulatory message and then erases the
+/// player's saved game and exits the program/game.
+/// Doesn't touch user input history.
 
+pub fn player_win() {
+    println!("\n\nCongratulations!\n\nYou escaped!\n");
+    save_game("0\nfalse".to_string(), SAVE_PATH);
+    process::exit(1);
+}
 
 
 

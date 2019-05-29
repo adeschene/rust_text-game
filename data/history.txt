@@ -1,1 +1,7 @@
+l
+north
+west
+north
+quit
+l
 quit

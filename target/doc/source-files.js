@@ -12,3 +12,4 @@ sourcesIndex["unicode_segmentation"] = {"name":"","dirs":[],"files":["grapheme.r
 sourcesIndex["unicode_width"] = {"name":"","dirs":[],"files":["lib.rs","tables.rs"]};
 sourcesIndex["utf8parse"] = {"name":"","dirs":[],"files":["lib.rs","table.rs","types.rs"]};
 sourcesIndex["void"] = {"name":"","dirs":[],"files":["lib.rs"]};
+createSourceSidebar();

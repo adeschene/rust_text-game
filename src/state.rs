@@ -9,12 +9,14 @@ use std::fs;
 
 pub struct State {
     pub curr_room: usize,
+    pub in_final_room: bool,
 }
 
 impl State {
     pub fn new() -> State {
         State {
             curr_room: 0,
+            in_final_room: false,
         }
     }
     /// Takes a path to the save file and returns the
@@ -24,12 +26,38 @@ impl State {
         let mut entries = gamedata.lines();
         State {
             curr_room: entries.next().unwrap().parse().unwrap(),
+            in_final_room: entries.next().unwrap().parse().unwrap(),
         }
     }
     /// Converts itself into a String representation for saving.
     pub fn serialize(&self) -> String {
-        let mut s = String::new();
-        s.push_str(&self.curr_room.to_string());
+        let s = format!("{}\n{}\n"
+                        , &self.curr_room.to_string()
+                        , &self.in_final_room.to_string()
+                       );
         s
     }
+    /// Keeps track of various flags regarding game behavior,
+    /// player decisions, actions, etc. Very limited currently.
+    pub fn update_flags(self, final_room: usize) -> State {
+        State {
+            curr_room: self.curr_room,
+            in_final_room: &self.curr_room == &final_room,
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
