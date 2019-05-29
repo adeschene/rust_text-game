@@ -43,7 +43,7 @@ Implementation plans -- some more realistic than others -- in no particular orde
 - Add the following commands: take item, use item, help.
 
 ## Author information
-Alec Deschene - deschene@pdx.edu - adeschene.github.io
+Alec Deschene: deschene@pdx.edu
 
 ## License
 This project is put forth under the MIT License. More information can be found by examining the LICENSE file.
