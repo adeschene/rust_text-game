@@ -15,7 +15,11 @@ Ultimately will allow the player to explore and attempt to escape a small dungeo
 
 git clone https://github.com/adeschene/rust_text-game.git
 
-- Build and run game:
+- Build game:
+
+cargo build
+
+- Run game:
 
 cargo run
 
