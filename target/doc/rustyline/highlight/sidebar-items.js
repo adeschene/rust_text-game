@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["MatchingBracketHighlighter",""]],"trait":[["Highlighter","Syntax highlighter with ANSI color. Rustyline will try to handle escape sequence for ANSI color on windows when not supported natively (windows <10)."]]});
