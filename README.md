@@ -36,7 +36,7 @@ Playability is currently very low. There are, however, a few things a player can
 - Enter 'quit' to end the game and exit the program. This will save the game before exiting. If, upon starting the game again, one chooses 'continue' at the main menu prompt, the state of the game at the last exit will be loaded. In contrast, choosing 'new' will erase the previous game and start over from the beginning.
 - For convenience, the up and down arrows will allow the player to move through previously entered inputs. This history is also saved, loaded, and overwritten the same way that the game state is.
 - If the player navigates to the 'final room' and then exits through the northern door of that room, the game will be won, everything will reset, and the program/game will end.
-- This is currently the extent of the in-game functionality.
+This is currently the extent of the in-game functionality.
 
 ## Goals for this project
 Implementation plans -- some more realistic than others -- in no particular order.
