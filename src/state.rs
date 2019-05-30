@@ -13,10 +13,16 @@ pub struct State {
 }
 
 impl State {
-    pub fn new() -> State {
+    pub fn empty() -> State {
         State {
             curr_room: 0,
             in_final_room: false,
+        }
+    }
+    pub fn new(curr_room: usize, in_final_room: bool) -> State {
+        State {
+            curr_room,
+            in_final_room,
         }
     }
     /// Takes a path to the save file and returns the

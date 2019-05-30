@@ -1,7 +1,2 @@
-l
-north
-west
-north
-quit
-l
+help
 quit
