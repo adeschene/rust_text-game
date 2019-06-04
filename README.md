@@ -48,6 +48,7 @@ Implementation plans -- some more realistic than others -- in no particular orde
 - Add enemies and combat
 - Add various storytelling elements
 - Add the following commands: take item, use item, ~~help~~.
+- Add unit tests.
 
 ## Author information
 Alec Deschene: deschene@pdx.edu
