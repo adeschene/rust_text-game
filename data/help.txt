@@ -1,16 +1,17 @@
 
 
-                    ___Help___
+--------------------------------------------------------
+
+                     ___Help___
 
   Commands:
 
-go [direction] -> Move in a given direction.
-                  Example: go north
-help           -> Display this help menu! :)
-quit           -> Quit the game. Saves the game first.
-
-  Playing:
-
-Look around for the final room and then leave. Simple!
+ go [direction] -> Move in a given direction.
+                   Example: go north
+ look [object]  -> Examine a given object more closely.
+                   Example: look table
+ help (?)       -> Display this help menu! :)
+ quit (q)       -> Quit the game. Saves the game first.
 
 
+--------------------------------------------------------

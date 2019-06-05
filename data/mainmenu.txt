@@ -1,9 +1,10 @@
 
+---------------------------------
 
-       ___Main_Menu___
+        ___Main_Menu___
 
 'new'      -> start a new game
 'continue' -> load previous game
 'quit'     -> exit
 
-  Please enter your choice:
+---------------------------------

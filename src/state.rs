@@ -10,6 +10,8 @@ use std::fs;
 pub struct State {
     pub curr_room: usize,
     pub in_final_room: bool,
+    pub examined_wall: bool,
+    pub took_key: bool,
 }
 
 impl State {
@@ -17,12 +19,17 @@ impl State {
         State {
             curr_room: 0,
             in_final_room: false,
+            examined_wall: false,
+            took_key: false,
         }
     }
-    pub fn new(curr_room: usize, in_final_room: bool) -> State {
+    pub fn new(curr_room: usize, in_final_room: bool,
+               examined_wall: bool, took_key: bool,) -> State {
         State {
             curr_room,
             in_final_room,
+            examined_wall,
+            took_key,
         }
     }
     /// Takes a path to the save file and returns the
@@ -33,13 +40,17 @@ impl State {
         State {
             curr_room: entries.next().unwrap().parse().unwrap(),
             in_final_room: entries.next().unwrap().parse().unwrap(),
+            examined_wall: entries.next().unwrap().parse().unwrap(),
+            took_key: entries.next().unwrap().parse().unwrap(),
         }
     }
     /// Converts itself into a String representation for saving.
     pub fn serialize(&self) -> String {
-        let s = format!("{}\n{}\n"
+        let s = format!("{}\n{}\n{}\n{}\n"
                         , &self.curr_room.to_string()
                         , &self.in_final_room.to_string()
+                        , &self.examined_wall.to_string()
+                        , &self.took_key.to_string()
                        );
         s
     }
@@ -49,6 +60,8 @@ impl State {
         State {
             curr_room: self.curr_room,
             in_final_room: &self.curr_room == &final_room,
+            examined_wall: self.examined_wall,
+            took_key: self.took_key,
         }
     }
 }

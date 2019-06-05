@@ -10,6 +10,7 @@ mod state;
 use rustyline::Editor;
 use std::process;
 use std::fs;
+use std::io;
 
 // Filename constants; TODO: File path expansion
 const INTRO_PATH: &str   = "../data/intro.txt";
@@ -30,32 +31,34 @@ pub fn main() {
     let mut rl = Editor::<()>::new();
     // Keep track of whether saved game or new game.
     let mut is_saved_game = false;
+    // Print game intro text.
+    print_from_file(INTRO_PATH);
     // Main menu loop
     loop {
         print_from_file(MENU_PATH);
         let choice = rl.readline("\n> ").expect("Readline error");
         match choice.to_ascii_lowercase().as_str() {
-            "new"      => { break },
-            "continue" => { is_saved_game = true; break },
-            "quit"     => { println!("\n\nExiting!"); process::exit(1) },
-            _          => println!("\nInvalid choice!")
+            "new" | "n"      => { break },
+            "continue" | "c" => { is_saved_game = true; break },
+            "quit" | "q"     => { println!("\n\nExiting!"); process::exit(1) },
+            _                => println!("\nInvalid choice!")
         }
     }
     // Set game state to new game state, change later if loading.
     let mut gstate = state::State::empty();
-    // Prints different intro text depending on type of game.
+    // Load last gamestate and input history if "continuing".
     if is_saved_game {
-        println!("Welcome back!");
+        println!("\n\nWelcome back!");
         // Load input history from prior play sessions.
         // Returns error if there is no history file.
         rl.load_history(HISTORY_PATH)
-          .expect("history.txt is missing or inaccessible");
+          .expect("history file is missing or inaccessible");
         gstate = load_game(); // Load previous game state
-    } else {
-        print_from_file(INTRO_PATH);
     }
     // Main game / user command loop.
     loop {
+        // Display the room description to the player.
+        println!("\n\n{}", room::get_desc(gstate.curr_room, gstate.took_key));
         let input = rl.readline("\n> ").expect("Readline error");
         rl.add_history_entry(input.as_ref());
         // Split up the words in the user's input; only using first two.
@@ -65,24 +68,36 @@ pub fn main() {
         let arg = parse_input(input_iter.next());
         // Use input to execute the desired command as best we can.
         match cmd.as_str() {
-            "go" | "move"   => gstate = go_cmd(gstate, arg.as_str()),
-            "help" | "?"    => print_from_file(HELP_PATH),
-            "quit" | "exit" =>
+            "go" | "move" | "walk" =>
+                {
+                    gstate = go_cmd(gstate, arg.as_str());
+                    wait_for_player();
+                },
+            "look" | "examine"     => 
+                {
+                    gstate = look_cmd(gstate, arg.as_str());
+                    wait_for_player();
+                },
+            "help" | "?"           =>
+                {
+                    print_from_file(HELP_PATH);
+                    wait_for_player();
+                },
+            "quit" | "exit" | "q"  =>
                 {
                     println!("\n\nExiting!"); 
                     rl.save_history(HISTORY_PATH).unwrap();
                     save_game(gstate.serialize());
                     process::exit(1)
                 },
-            other           =>
-                println!("\n{} is not a valid command.", other),
+            other                  =>
+                {
+                    println!("\n{} is not a valid command.", other);
+                    wait_for_player();
+                },
         }
         // Update the state based on user's actions.
         gstate = gstate.update_flags(room::FINAL_ROOM);
-        // For testing:
-        println!("\nRoom info: {:?}\nIn final room? {:?}\n"
-                 , room::get_info(gstate.curr_room)
-                 , gstate.in_final_room);
     }
 }
 
@@ -95,35 +110,125 @@ pub fn main() {
 
 pub fn go_cmd(gstate: state::State, dir: &str) -> (state::State) {
     match dir {
-        "north" | "up" | "forward" => { 
-                       if gstate.in_final_room {
-                           player_win(); // Escaped; Went north from final room.
-                           gstate // Just satisfies the return type
-                       } else {
-                           state::State::new( room::go_north(gstate.curr_room),
-                                              gstate.in_final_room,
-                                            )
-                       }
-                   }
-        "west" | "left" => {
-                       state::State::new( room::go_west(gstate.curr_room),
-                                          gstate.in_final_room,
-                                        )
-                   }
-        "south" | "down" | "back" => {
-                       state::State::new( room::go_south(gstate.curr_room),
-                                          gstate.in_final_room,
-                                        )
-                   }
-        "east" | "right" => {
-                       state::State::new( room::go_east(gstate.curr_room),
-                                          gstate.in_final_room,
-                                        )
-                   }
-        other   => {
-                       println!("\n{} is not a valid direction.", other);
-                       gstate
-                   }
+        "north" | "up" | "forward" =>
+            { 
+                if gstate.in_final_room {
+                    player_win(); // Escaped; Went north from final room.
+                    gstate // Just satisfies the return type
+                } else {
+                    state::State::new
+                        (   room::go_north(gstate.curr_room,
+                                           gstate.took_key),
+                            gstate.in_final_room,
+                            gstate.examined_wall,
+                            gstate.took_key,
+                        )
+                }
+            }
+        "west" | "left"            =>
+            {
+                state::State::new
+                    (   room::go_west(gstate.curr_room),
+                        gstate.in_final_room,
+                        gstate.examined_wall,
+                        gstate.took_key,
+                    )
+            }
+        "south" | "down" | "back"  =>
+            {
+                state::State::new
+                    (   room::go_south(gstate.curr_room,
+                                       gstate.examined_wall),
+                        gstate.in_final_room,
+                        gstate.examined_wall,
+                        gstate.took_key,
+                    )
+            }
+        "east" | "right"           =>
+            {
+                state::State::new
+                    (   room::go_east(gstate.curr_room),
+                        gstate.in_final_room,
+                        gstate.examined_wall,
+                        gstate.took_key,
+                    )
+            }
+        other                      =>
+            {
+                println!("\n{} is not a valid direction.", other);
+                gstate
+            }
+    }
+}
+
+/// 
+/// 
+/// Returns a new game state with the updated player discoveries.
+/// If the desired object is not examinable, returns old state.
+
+pub fn look_cmd(gstate: state::State, obj: &str) -> (state::State) {
+    match obj {
+        "wall"  =>
+            { 
+                if gstate.curr_room == room::CELL {
+                    if gstate.examined_wall {
+                        println!("\n\nYou see the entryway to the secret room.");
+                        gstate
+                    } else {
+                        println!(
+                            "\n\nYou see a slight indentation in the wall.\n\
+                            You put you hand against it and push gently.\n\
+                            As soon as you apply the least bit of pressure,\n\
+                            the indentation pushes inward, revealing\n\
+                            a small, dimly lit room."
+                                );
+                        state::State::new
+                            (   gstate.curr_room,
+                                gstate.in_final_room,
+                                true,
+                                gstate.took_key,
+                            )
+                    }
+                } else {
+                    println!("\n\nYou look carefully at each wall...\
+                              for some reason.");
+                    gstate
+                }
+            }
+        "table" =>
+            { 
+                if gstate.curr_room == room::SECRET_ROOM {
+                    if gstate.took_key {
+                        println!("\n\nThe table is now empty...");
+                        gstate
+                    } else {
+                        println!("\n\nYou walk up to the table and look \
+                                  at it more closely.\nOn the table \
+                                  there is a key and nothing else.\n\
+                                  You take the key with trembling fingers.");
+                        state::State::new
+                            (   gstate.curr_room,
+                                gstate.in_final_room,
+                                gstate.examined_wall,
+                                true,
+                            )
+                    }
+                } else {
+                    println!("\n\nHmmm...there aren't \
+                              any tables around you...");
+                    gstate
+                }
+            }
+        "self"  =>
+            {
+                println!("\n\nThat's a little vain, isn't it?");
+                gstate
+            }
+        other   =>
+            {
+                println!("\n\nCan't examine {}.", other);
+                gstate
+            }
     }
 }
 
@@ -157,7 +262,7 @@ pub fn print_from_file(path: &str) {
 
 pub fn save_game(gs: String) {
     fs::write(SAVE_PATH, &gs)
-        .expect("Error writing save.txt file");
+        .expect("Error writing save file");
 }
 
 /// Deserializes the save file in the supplied path
@@ -177,11 +282,21 @@ pub fn load_game() -> state::State {
 
 pub fn player_win() {
     println!("\n\nCongratulations!\n\nYou escaped!\n");
+    wait_for_player();
     save_game("0\nfalse".to_string());
     process::exit(1);
 }
 
+/// Pauses the game loop execution after showing info
+/// to the player, with the intention of letting the 
+/// player examine the information and then press the
+/// enter key to move on when they're ready to.
 
+pub fn wait_for_player() {
+    println!("\n\n > Press RETURN to continue <");
+    let mut unused = String::new();
+    let _ = io::stdin().read_line(&mut unused);
+}
 
 
 

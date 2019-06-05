@@ -1,11 +1,16 @@
 
 
-You have awakened in a cell.
+---------------------------------
 
-Pretty scary stuff.
+   Welcome to Rust Text Game!
 
-For some reason you are surrounded by doors
-on all four walls.
+    (Creative title, I know)
 
-Find a way out!
+---------------------------------
 
+  You have awakened in a cell.
+  Pretty scary stuff, eh?
+  Where are you?
+  How did you get here?
+  Who cares?
+  Find a way out!
