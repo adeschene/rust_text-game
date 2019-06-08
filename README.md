@@ -41,6 +41,10 @@ Playability is currently very low. There are, however, a few things a player can
 
 This is currently the extent of the in-game functionality.
 
+## Writeup
+
+In addition to the information in this README, a more in depth analysis and writup can be found by looking at the file Rust_Text_Game_WriteUp.pdf.
+
 ## Goals for this project
 Implementation plans -- some more realistic than others -- in no particular order.
 - Add more items
