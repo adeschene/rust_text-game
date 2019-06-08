@@ -41,10 +41,6 @@ Playability is currently very low. There are, however, a few things a player can
 
 This is currently the extent of the in-game functionality.
 
-## Writeup
-
-In addition to the information in this README, a more in depth analysis and writup can be found by looking at the file Rust_Text_Game_WriteUp.pdf.
-
 ## Goals for this project
 Implementation plans -- some more realistic than others -- in no particular order.
 - Add more items
@@ -53,6 +49,16 @@ Implementation plans -- some more realistic than others -- in no particular orde
 - Add enemies and combat
 - Add more storytelling elements
 - Add more unit tests
+
+## Reflections
+Throughout this project, I've learned a lot about Rust, predictably. The borrow checker and I are now very well acquainted.
+I feel like I understand a lot more about how a rust program is set up (module structures, etc.) than I did before.
+Doc comments were a fun thing to figure out, and are really quite nice.
+And of course, this project has been another in a long list of lessons on managing time and priorities.
+Overall, it's been a lot of fun so far.
+
+## Writeup
+In addition to the information in this README, a more in depth analysis and writup can be found by looking at the file Rust_Text_Game_WriteUp.pdf.
 
 ## Author information
 Alec Deschene: deschene@pdx.edu
