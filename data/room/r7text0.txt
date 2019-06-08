@@ -1,0 +1,8 @@
+
+
+You find yourself in a room filled with clothing.
+The clothes are all neatly folded and stacked.
+There appears to be a table in the corner, perhaps for folding.
+Barring that, the room is empty.
+A large metal door sits at the northern end of the room.
+The door is marked with a sign that reads "EXIT".

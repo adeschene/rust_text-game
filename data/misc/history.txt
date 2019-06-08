@@ -1,0 +1,24 @@
+look wall
+go down
+look table
+go up
+go left
+talk
+go right
+go down
+go right
+look nail
+go left
+go up
+go left
+talk
+q
+look wall
+go down
+look table
+go up
+go down
+go right
+go left
+go up
+q

@@ -9,7 +9,9 @@
  go [direction] -> Move in a given direction.
                    Example: go north
  look [object]  -> Examine a given object more closely.
+                   Will effectively "take" key items.
                    Example: look table
+ talk (t)       -> Speak to whoever's in the room.
  help (?)       -> Display this help menu! :)
  quit (q)       -> Quit the game. Saves the game first.
 
