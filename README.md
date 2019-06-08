@@ -34,6 +34,7 @@ Playability is currently very low. There are, however, a few things a player can
 - Enter 'go' followed by a direction ('north', 'up', etc) to move to the adjacent room in that direction (if there is one.)
 - Enter 'look' followed by an object to examine that object more closely / interact with it.
 - Enter 'help' to display the help menu.
+- Enter 'talk' to talk to a person who is in a room with you.
 - Enter 'quit' to end the game and exit the program. This will save the game before exiting. If, upon starting the game again, one chooses 'continue' at the main menu prompt, the state of the game at the last exit will be loaded. In contrast, choosing 'new' will erase the previous game and start over from the beginning.
 - For convenience, the up and down arrows will allow the player to move through previously entered inputs. This history is also saved, loaded, and overwritten the same way that the game state is.
 - If the player navigates to the 'final room' and then exits through the northern door of that room, the game will be won, everything will reset, and the program/game will end.
@@ -42,13 +43,12 @@ This is currently the extent of the in-game functionality.
 
 ## Goals for this project
 Implementation plans -- some more realistic than others -- in no particular order.
-- Add more room information and make them more interesting
 - Add more items
-- Abstract out most main() functionality to helper functions
-- Add NPCs to interact with
+- Abstract out more main() functionality to helper functions
+- Add more NPCs
 - Add enemies and combat
 - Add more storytelling elements
-- Add unit tests
+- Add more unit tests
 
 ## Author information
 Alec Deschene: deschene@pdx.edu
