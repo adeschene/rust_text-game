@@ -25,9 +25,9 @@ cargo run
 
 **NOTE**: Currently, the game will only work properly if the user's current working directory is '~/rust_text-game/src/'. This issue is currently being sorted out.
 
-## How to play
+## Functionality
 
-Playability is currently very low. There are, however, a few things a player can do at the moment.
+There's quite a bit to do in this game, currently. Winning the game involves finding your way out, and doing that requires solving puzzles, talking to NPCs, doing small quests, and is actually somewhat fun to do.
 
 - The first menu presents the player with options to start a new game, continue a previous game, or quit. Enter 'new', 'continue', or 'quit' into the console.
 - If either of the first two options was chosen in the last menu, a game will now have been started, and entering commands into the game prompt will cause different things to happen.
