@@ -15,8 +15,11 @@ const R1_TEXT_0: &str  = "../data/room/r1text0.txt";
 const R2_TEXT_0: &str  = "../data/room/r2text0.txt";
 const R3_TEXT_0: &str  = "../data/room/r3text0.txt";
 const R4_TEXT_0: &str  = "../data/room/r4text0.txt";
+const R4_TEXT_1: &str  = "../data/room/r4text1.txt";
 const R5_TEXT_0: &str  = "../data/room/r5text0.txt";
+const R5_TEXT_1: &str  = "../data/room/r5text1.txt";
 const R6_TEXT_0: &str  = "../data/room/r6text0.txt";
+const R6_TEXT_1: &str  = "../data/room/r6text1.txt";
 const R7_TEXT_0: &str  = "../data/room/r7text0.txt";
 const R8_TEXT_0: &str  = "../data/room/r8text0.txt";
 const R8_TEXT_1: &str  = "../data/room/r8text1.txt";
@@ -37,7 +40,7 @@ const R12_TEXT_1: &str = "../data/room/r12text1.txt";
 
 pub fn get_desc(room_index: usize, has_key: bool,
                 found_room: bool, has_broom: bool,
-                has_nail: bool) {
+                has_nail: bool, blimpo_left: bool) {
     match room_index {
         0  => {
                   if found_room == false { print_from_file(R0_TEXT_0) }
@@ -46,9 +49,18 @@ pub fn get_desc(room_index: usize, has_key: bool,
         1  => print_from_file(R1_TEXT_0),
         2  => print_from_file(R2_TEXT_0),
         3  => print_from_file(R3_TEXT_0),
-        4  => print_from_file(R4_TEXT_0),
-        5  => print_from_file(R5_TEXT_0),
-        6  => print_from_file(R6_TEXT_0),
+        4  => {
+                  if blimpo_left == false { print_from_file(R4_TEXT_0) }
+                  else { print_from_file(R4_TEXT_1) }
+              },
+        5  => {
+                  if blimpo_left == false { print_from_file(R5_TEXT_0) }
+                  else { print_from_file(R5_TEXT_1) }
+              },
+        6  => {
+                  if blimpo_left == false { print_from_file(R6_TEXT_0) }
+                  else { print_from_file(R6_TEXT_1) }
+              },
         7  => print_from_file(R7_TEXT_0),
         8  => {
                   if has_nail == false { print_from_file(R8_TEXT_0) }
@@ -125,27 +137,27 @@ pub fn go_north(room_index: usize, has_key: bool,
 pub fn go_west(room_index: usize) -> usize {
     match room_index {
         3     => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou head further into the corridor.");
                      4
                  }
         4     => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou head further into the corridor.");
                      5
                  }
         5     => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou head towards the end of the corridor.");
                      6
                  }
         8     => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou hurriedly vacate the soiled cell.");
                      1
                  }
         9     => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou wade through the furniture and out of the room.");
                      3
                  }
         10    => {
-                     println!("\n\nYou enter the western room.");
+                     println!("\n\nYou head back into the sea of furniture.");
                      9
                  }
         other => {
@@ -180,15 +192,15 @@ pub fn go_south(room_index: usize, found_room: bool) -> usize {
                      1
                  }
         3     => {
-                     println!("\n\nYou speedwalk out of the old man's cold stare.");
+                     println!("\n\nYou enter the room with the old man."); 
                      2
                  }
         7     => {
-                     println!("\n\nYou enter the southern room.");
+                     println!("\n\nYou leave the laundry room and head back.");
                      6
                  }
         11    => {
-                     println!("\n\nYou enter the southern room.");
+                     println!("\n\nYou head out from the dank storage room.");
                      10
                  }
         other => {
@@ -217,23 +229,24 @@ pub fn go_east(room_index: usize, met_blimpo: bool) -> usize {
                      }
                  }
         3     => {
-                     println!("\n\nYou enter the eastern room.");
+                     println!("\n\nYou maneuver your way into the sea of furniture.");
                      9
                  }
         4     => {
-                     println!("\n\nYou enter the eastern room.");
+                     println!("\n\nYou head back into the T-junction.");
                      3
                  }
         5     => {
-                     println!("\n\nYou enter the eastern room.");
+                     println!("\n\nYou head into the eastern corridor.");
                      4
                  }
         6     => {
-                     println!("\n\nYou enter the eastern room.");
+                     println!("\n\nYou head back into the dark corridor.");
                      5
                  }
         9     => {
-                     println!("\n\nYou enter the eastern room.");
+                     println!("\n\nYou wade through the last of the furniture\n\
+                               and head into the makeshift break room.");
                      10
                  }
         other => {

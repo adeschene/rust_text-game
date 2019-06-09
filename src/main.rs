@@ -65,7 +65,7 @@ pub fn main() {
         // Display the current room description to the player.
         room::get_desc(gstate.curr_room, gstate.took_key,
                        gstate.examined_wall, gstate.took_broom,
-                       gstate.took_nail);
+                       gstate.took_nail, gstate.final_room_unlocked);
         // Prompt for user input: command [argument]
         let input = rl.readline("\n> ").expect("Readline error");
         // Add this input to user input history.
