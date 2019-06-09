@@ -1,20 +1,22 @@
-q
 look wall
 go down
 look table
 go up
-go right
-go up
-talk
-go up
-go right
-go up
-look broom
-go back
 go left
+talk
 go right
 go down
-talk
-go up
+go right
+look nail
 go left
+go up
+go right
+go left
+talk
+go north
+look clothes
+q
+talk
+go back
+talk
 q

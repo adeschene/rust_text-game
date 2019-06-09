@@ -117,11 +117,11 @@ pub fn go_north(room_index: usize, has_key: bool,
                      }
                  }
         10    => {
-                     println!("\n\nYou enter the northern room.");
+                     println!("\n\nYou head into the open door.");
                      11
                  }
         12    => {
-                     println!("\n\nYou enter the northern room.");
+                     println!("\n\nYou head back into your cell.");
                      0
                  }
         other => {

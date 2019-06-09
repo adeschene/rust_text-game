@@ -11,9 +11,11 @@ pub struct State {
     pub examined_wall: bool,
     pub took_key: bool,
     pub took_broom: bool,
+    pub helped_carl: bool,
     pub took_nail: bool,
     pub met_blimpo: bool,
     pub final_room_unlocked: bool,
+    pub wearing_clothes: bool,
 }
 
 /// The implementation of the State struct.
@@ -28,25 +30,30 @@ impl State {
             examined_wall: false,
             took_key: false,
             took_broom: false,
+            helped_carl: false,
             took_nail: false,
             met_blimpo: false,
             final_room_unlocked: false,
+            wearing_clothes: false,
         }
     }
 
     /// Create a new State based on the passed in arguments.
 
     pub fn new(curr_room: usize, examined_wall: bool, took_key: bool,
-               took_broom: bool, took_nail: bool, met_blimpo: bool,
-               final_room_unlocked: bool) -> State {
+               took_broom: bool, helped_carl: bool,
+               took_nail: bool, met_blimpo: bool,
+               final_room_unlocked: bool, wearing_clothes: bool) -> State {
         State {
             curr_room,
             examined_wall,
             took_key,
             took_broom,
+            helped_carl,
             took_nail,
             met_blimpo,
             final_room_unlocked,
+            wearing_clothes,
         }
     }
 
@@ -60,23 +67,27 @@ impl State {
             examined_wall: entries.next().unwrap().parse().unwrap(),
             took_key: entries.next().unwrap().parse().unwrap(),
             took_broom: entries.next().unwrap().parse().unwrap(),
+            helped_carl: entries.next().unwrap().parse().unwrap(),
             took_nail: entries.next().unwrap().parse().unwrap(),
             met_blimpo: entries.next().unwrap().parse().unwrap(),
             final_room_unlocked: entries.next().unwrap().parse().unwrap(),
+            wearing_clothes: entries.next().unwrap().parse().unwrap(),
         }
     }
 
     /// Converts a State object into a String representation for saving.
 
     pub fn serialize(&self) -> String {
-        let s = format!("{}\n{}\n{}\n{}\n{}\n{}\n{}\n~"
+        let s = format!("{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n~"
                         , &self.curr_room.to_string()
                         , &self.examined_wall.to_string()
                         , &self.took_key.to_string()
                         , &self.took_broom.to_string()
+                        , &self.helped_carl.to_string()
                         , &self.took_nail.to_string()
                         , &self.met_blimpo.to_string()
                         , &self.final_room_unlocked.to_string()
+                        , &self.wearing_clothes.to_string()
                        );
         s
     }
@@ -93,9 +104,11 @@ impl State {
                     examined_wall: change.1,
                     took_key: self.took_key,
                     took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
                     took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
             2     =>
                 State {
@@ -103,9 +116,11 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: change.1,
                     took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
                     took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
             3     =>
                 State {
@@ -113,9 +128,11 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: self.took_key,
                     took_broom: change.1,
+                    helped_carl: self.helped_carl,
                     took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
             4     =>
                 State {
@@ -123,9 +140,11 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: self.took_key,
                     took_broom: self.took_broom,
-                    took_nail: change.1,
+                    helped_carl: change.1,
+                    took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
             5     =>
                 State {
@@ -133,9 +152,11 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: self.took_key,
                     took_broom: self.took_broom,
-                    took_nail: self.took_nail,
-                    met_blimpo: change.1,
+                    helped_carl: self.helped_carl,
+                    took_nail: change.1,
+                    met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
             6     =>
                 State {
@@ -143,9 +164,35 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: self.took_key,
                     took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
+                    took_nail: self.took_nail,
+                    met_blimpo: change.1,
+                    final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
+                },
+            7     =>
+                State {
+                    curr_room: self.curr_room,
+                    examined_wall: self.examined_wall,
+                    took_key: self.took_key,
+                    took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
                     took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: change.1,
+                    wearing_clothes: self.wearing_clothes,
+                },
+            8     =>
+                State {
+                    curr_room: self.curr_room,
+                    examined_wall: self.examined_wall,
+                    took_key: self.took_key,
+                    took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
+                    took_nail: self.took_nail,
+                    met_blimpo: self.met_blimpo,
+                    final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: change.1,
                 },
             _     =>
                 State {
@@ -153,9 +200,11 @@ impl State {
                     examined_wall: self.examined_wall,
                     took_key: self.took_key,
                     took_broom: self.took_broom,
+                    helped_carl: self.helped_carl,
                     took_nail: self.took_nail,
                     met_blimpo: self.met_blimpo,
                     final_room_unlocked: self.final_room_unlocked,
+                    wearing_clothes: self.wearing_clothes,
                 },
         }
     }

@@ -14,13 +14,16 @@ use std::process;
 use std::fs;
 
 // Filename constants; TODO: File path expansion
-const INTRO_PATH: &str   = "../data/misc/intro.txt";
-const HISTORY_PATH: &str = "../data/misc/history.txt";
-const SAVE_PATH: &str    = "../data/misc/savedgame.txt";
-const HELP_PATH: &str    = "../data/misc/help.txt";
-const MENU_PATH: &str    = "../data/misc/mainmenu.txt";
-const NPCS_DEF: &str     = "../data/npc/npcsdefault.txt";
-const STATE_DEF: &str    = "../data/state/statedefault.txt";
+const INTRO_PATH: &str        = "../data/misc/intro.txt";
+const HISTORY_PATH: &str      = "../data/misc/history.txt";
+const SAVE_PATH: &str         = "../data/misc/savedgame.txt";
+const HELP_PATH: &str         = "../data/misc/help.txt";
+const MENU_PATH: &str         = "../data/misc/mainmenu.txt";
+const NPCS_DEF: &str          = "../data/npc/npcsdefault.txt";
+const STATE_DEF: &str         = "../data/state/statedefault.txt";
+const BAD_ENDING_PATH: &str   = "../data/endings/badending.txt";
+const GOOD_ENDING0_PATH: &str = "../data/endings/goodending0.txt";
+const GOOD_ENDING1_PATH: &str = "../data/endings/goodending1.txt";
 
 
 /// Contains the main game loop, the main menu loop,
@@ -128,7 +131,8 @@ pub fn go_cmd(gstate: state::State, dir: &str) -> state::State {
             "north" | "up" | "forward" =>
                 { 
                     if gstate.curr_room == room::FINAL_ROOM {
-                        player_win(); // Escaped; Went north from final room.
+                        // Game done; Went north from final room.
+                        game_end(gstate.helped_carl, gstate.wearing_clothes);
                         gstate.curr_room // Just satisfies the return type
                     } else {
                         room::go_north(gstate.curr_room,
@@ -151,20 +155,24 @@ pub fn go_cmd(gstate: state::State, dir: &str) -> state::State {
         gstate.examined_wall,
         gstate.took_key,
         gstate.took_broom,
+        gstate.helped_carl,
         gstate.took_nail,
         gstate.met_blimpo,
         gstate.final_room_unlocked,
+        gstate.wearing_clothes,
     )
 }
 
 #[test]
 fn go_cmd_test() {
-    let start1 = state::State::new(2,false,false,false,false,false,false);
-    let start2 = state::State::new(2,false,false,false,false,false,false);
+    let start0 = state::State::new(0,false,false,false,false
+                                  ,false,false,false,false);
+    let start1 = state::State::new(0,false,false,false,false
+                                  ,false,false,false,false);
     // Going up from room 2 leads to room 3, so this should be true
-    assert_eq!(3, go_cmd(start1, "up").curr_room);
+    assert_eq!(3, go_cmd(start0, "up").curr_room);
     // Going up from room 3 is not possible, so this should be true
-    assert_eq!(3, go_cmd(go_cmd(start2, "up"), "up").curr_room);
+    assert_eq!(3, go_cmd(go_cmd(start1, "up"), "up").curr_room);
 }
 
 /// Allows player to closely examine key objects and effectively "take"
@@ -177,29 +185,39 @@ pub fn look_cmd(gstate: state::State, obj: &str) -> state::State {
     match obj {
         "wall"  =>
             {   // Only examine wall if player is in the right room.
-                if gstate.curr_room == room::CELL {
-                    // If player already looked at wall,
-                    // display alternate description.
-                    if gstate.examined_wall {
-                        println!("\n\nYou see the entryway \
-                                  to the secret room.");
-                        gstate
-                    } else {
-                        println!(
-                            "\n\nYou see a slight indentation in the wall.\n\
-                            You put you hand against it and push gently.\n\
-                            As soon as you apply the least bit of pressure,\n\
-                            the indentation pushes inward, revealing\n\
-                            a small, dimly lit room."
-                                );
-                            // set gstate.examined_wall to true
-                            gstate.update((1, true))
-                    }
-                } else {
-                    println!("\n\nYou look carefully at each wall...\
-                              for some reason.");
-                    gstate
+                match gstate.curr_room {
+                    room::CELL        => 
+                        {
+                            // If player already looked at wall,
+                            // display alternate description.
+                            if gstate.examined_wall {
+                                println!("\n\nYou see the entryway \
+                                          to the secret room.");
+                            } else {
+                                println!(
+                                "\n\nYou see a slight \
+                                 indentation in the wall.\n\
+                                 You put you hand against \
+                                 it and push gently.\n\
+                                 As soon as you apply the \
+                                 least bit of pressure,\n\
+                                 the indentation pushes inward, \
+                                 revealing\n\
+                                 a small, dimly lit room.");
+                                // set gstate.examined_wall to true
+                                return gstate.update((1, true));
+                            }
+                        }
+                    room::SECRET_ROOM =>
+                            println!("\n\nYou see the hole in \
+                                      the wall leading back into \
+                                      your cell..."),
+                    _                 =>
+                            println!("\n\nYou look carefully \
+                                      at each wall...\
+                                      for some reason."),
                 }
+                gstate
             }
         "table" =>
             { 
@@ -254,12 +272,38 @@ pub fn look_cmd(gstate: state::State, obj: &str) -> state::State {
                                   without touching the cot itself,\n\
                                   and move swiftly away from the bed.");
                         // set gstate.took_nail to true
-                        gstate.update((4, true))
+                        gstate.update((5, true))
                     }
                 } else {
                     println!("\n\nThere are no brooms in sight...");
                     gstate
                 }
+            }
+        "clothes"  =>
+            { 
+                if gstate.curr_room == room::FINAL_ROOM {
+                    if gstate.wearing_clothes {
+                        println!("\n\nMore uniforms lay in piles.");
+                    } else {
+                        println!("\n\nYou take a closer look \
+                                  at the clothes scattered around.\n\
+                                  You soon realize that they are \
+                                  uniforms.\nThinking back, you seem \
+                                  to recall the old man from \
+                                  earlier wearing the same uniform.\n\
+                                  You decide to find one that fits \
+                                  and put it on...for safe measure.");
+                        // set gstate.took_nail to true
+                        return gstate.update((8, true));
+                    }
+                } else if gstate.wearing_clothes {
+                    println!("\n\nYou are wearing what you can only \
+                              describe as a janitor's uniform.");
+                } else {
+                    println!("\n\nYou are wearing tattered clothes \
+                              that you don't remember putting on...");
+                }
+                gstate
             }
         "self"  =>
             {
@@ -276,7 +320,8 @@ pub fn look_cmd(gstate: state::State, obj: &str) -> state::State {
 
 #[test]
 fn look_cmd_test_ok() {
-    let start = state::State::new(0,false,false,false,false,false,false);
+    let start = state::State::new(0,false,false,false,false
+                                  ,false,false,false,false);
     // Looking at wall in room 0 should set examined_wall to true,
     // so this should be true
     assert!(look_cmd(start, "wall").examined_wall);
@@ -285,7 +330,8 @@ fn look_cmd_test_ok() {
 #[test]
 #[should_panic]
 fn look_cmd_test_fail() {
-    let start = state::State::new(1,false,false,false,false,false,false);
+    let start = state::State::new(0,false,false,false,false
+                                  ,false,false,false,false);
     // Looking at wall in room 1 should set not affect anything,
     // so this should be false and cause panic
     assert!(look_cmd(start, "wall").examined_wall);
@@ -303,6 +349,8 @@ pub fn talk_cmd(mut npcs: Vec<npcs::Npc>,
     if gstate.curr_room == npcs[0].location {
         if gstate.took_broom && npcs[0].given_quest_item == false {
             npcs[0] = npcs[0].receive_item().speak();
+            // set gstate.helped_carl to true
+            return (npcs, gstate.update((4, true)))
         } else {
             npcs[0] = npcs[0].speak();
         }
@@ -310,14 +358,14 @@ pub fn talk_cmd(mut npcs: Vec<npcs::Npc>,
     } else if gstate.curr_room == npcs[1].location {
         if gstate.took_nail && npcs[1].given_quest_item == false {
             npcs[1] = npcs[1].receive_item().speak();
-        } else if npcs[1].quest_done {
-            npcs[1] = npcs[1].speak();
             // set gstate.final_room_unlocked to true
-            return (npcs, gstate.update((6, true)))
+            return (npcs, gstate.update((7, true)))
+        } else if npcs[1].quest_done {
+            npcs[1] = npcs[1].speak(); // NPC has left; tell player
         } else {
             npcs[1] = npcs[1].speak();
             // set gstate.met_blimpo to true
-            return (npcs, gstate.update((5, true)))
+            return (npcs, gstate.update((6, true)))
         }
     // Case for room without an NPC present
     } else { println!("\n\nThere's nobody to talk to..."); }
@@ -351,14 +399,23 @@ pub fn load_game() -> (state::State, Vec<npcs::Npc>) {
 }
 
 /// When the player leaves through the northern door of
-/// the final room, the player wins the game.
+/// the final room (Room 7), the game ends.
 ///
-/// Displays a congratulatory message and then erases the
+/// Depending on the decisions/actions of the player,
+/// either a bad or good ending plays out.
+///
+/// Displays ending text and then erases the
 /// player's save data and exits the program/game.
 /// Doesn't touch user input history.
 
-pub fn player_win() {
-    println!("\n\nCongratulations!\n\nYou made it!\n");
+pub fn game_end(helped_carl: bool, wearing_clothes: bool) {
+    if wearing_clothes {
+        helpers::print_from_file(GOOD_ENDING0_PATH);
+    } else if helped_carl {
+        helpers::print_from_file(GOOD_ENDING1_PATH);
+    } else {
+        helpers::print_from_file(BAD_ENDING_PATH);
+    }
     helpers::wait_for_player();
     let npcs_default = fs::read_to_string(NPCS_DEF).unwrap();
     let state_default = fs::read_to_string(STATE_DEF).unwrap();
