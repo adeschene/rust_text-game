@@ -61,7 +61,7 @@ Overall, it's been a lot of fun so far.
 In addition to the information in this README, a more in depth analysis and writup can be found by looking at the file Rust_Text_Game_WriteUp.pdf.
 
 ## Author information
-Alec Deschene: deschene@pdx.edu
+Alec Deschene: alecdeschene@gmail.com
 
 ## License
 This project is put forth under the MIT License. More information can be found by examining the LICENSE file.
